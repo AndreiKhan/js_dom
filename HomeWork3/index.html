@@ -40,16 +40,26 @@
             img.src = photos[0].urls.small
 
             creator.textContent = photos[0].user.name
+            
+            //Если мы лайкали изображение то его id сохранится в хранилище
+            if (localStorage.getItem(`${photos[0].id}`)) {
 
-            likes.textContent = photos[0].likes
+                // Если мы уже лайкали изображение то просто увеличиваем счетчик сразу и не добавляем кнопке обработчика событий
+                likes.textContent = photos[0].likes + 1
 
-            button.addEventListener("click", () => {
-                if(!photos[0].liked_by_user) {
-                    photos[0].liked_by_user = true
-                    photos[0].likes += 1
-                    likes.textContent = photos[0].likes
-                }
-            })
+            } else {
+                // Если мы не лайкали изображение то устанавливаем стандартное значение и добавляем обработчик кнопке для добавления лайка и сохранения в хранилище
+                likes.textContent = photos[0].likes
+
+                button.addEventListener("click", () => {
+                    if(!photos[0].liked_by_user) {
+                        photos[0].liked_by_user = true
+                        photos[0].likes += 1
+                        likes.textContent = photos[0].likes
+                        localStorage.setItem(`${photos[0].id}`, photos[0].liked_by_user)
+                    }
+                })
+            }
         }
 
         loadPhoto()
